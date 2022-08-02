@@ -9,12 +9,16 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-app.get('/api/notes', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'Develop/public/index.html'));
+  });
+
+  app.get('/api/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Develop/public/notes.html'));
   });
 
 app.listen(PORT, () => {
 console.log(`App listening to ${PORT}`)
 })
 
-// app.get('/api/index/*', (req, res)) ; res.json();
+
