@@ -15,14 +15,17 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
+// starting path
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
+// path to notes.html
 app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
+// path to the data from the server
 app.get("/api/notes", (req, res) => {
   fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
@@ -34,6 +37,8 @@ app.get("/api/notes", (req, res) => {
   });
 });
 
+// method posting new note. creates a variable containing an object "title, text"
+// calls id using uniqid npm
 app.post("/api/notes", (req, res) => {
   const { text, title } = req.body;
 
@@ -43,6 +48,9 @@ app.post("/api/notes", (req, res) => {
       text,
       id: uniqid(),
     };
+
+    // reads the data previously posted. checks for error first, if no error,
+    // then new variable is created, grabbed the object, converts it to string because fs only passes strings
 
     fs.readFile("./db/db.json", "utf8", (err, data) => {
       if (err) {
@@ -61,10 +69,12 @@ app.post("/api/notes", (req, res) => {
   }
 });
 
+// redirects user to main page if route is typed incorrectly or nonexistent
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
+// calls for server
 app.listen(PORT, () => {
   console.log(`App listening to http://localhost:${PORT}`);
 });
